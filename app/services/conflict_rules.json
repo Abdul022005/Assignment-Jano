@@ -1,0 +1,47 @@
+{
+  "_comment": "Static conflict rules. In production this would be backed by a live drug database (e.g. RxNorm). Drug names must match canonical form (lowercase).",
+
+  "dose_ranges": {
+    "lisinopril":      { "min": 2.5,  "max": 40.0,  "unit": "mg" },
+    "furosemide":      { "min": 20.0, "max": 600.0,  "unit": "mg" },
+    "metoprolol":      { "min": 12.5, "max": 400.0,  "unit": "mg" },
+    "amlodipine":      { "min": 2.5,  "max": 10.0,   "unit": "mg" },
+    "warfarin":        { "min": 1.0,  "max": 10.0,   "unit": "mg" },
+    "aspirin":         { "min": 75.0, "max": 325.0,  "unit": "mg" },
+    "atorvastatin":    { "min": 10.0, "max": 80.0,   "unit": "mg" },
+    "levothyroxine":   { "min": 0.025,"max": 0.3,    "unit": "mg" },
+    "insulin glargine":{ "min": 10.0, "max": 100.0,  "unit": "units" },
+    "epoetin alfa":    { "min": 50.0, "max": 300.0,  "unit": "units" },
+    "sevelamer":       { "min": 800.0,"max": 4800.0, "unit": "mg" },
+    "cinacalcet":      { "min": 30.0, "max": 180.0,  "unit": "mg" }
+  },
+
+  "blacklisted_combinations": [
+    {
+      "drugs": ["warfarin", "aspirin"],
+      "reason": "Concurrent use significantly increases bleeding risk without anticoagulation monitoring."
+    },
+    {
+      "drugs": ["lisinopril", "spironolactone"],
+      "reason": "ACE inhibitor + potassium-sparing diuretic combination raises hyperkalaemia risk in CKD patients."
+    },
+    {
+      "drugs": ["metformin", "contrast dye"],
+      "reason": "Metformin must be held before iodinated contrast administration (lactic acidosis risk)."
+    },
+    {
+      "drugs": ["ciprofloxacin", "sevelamer"],
+      "reason": "Sevelamer chelates fluoroquinolones, significantly reducing absorption."
+    },
+    {
+      "drugs": ["simvastatin", "amiodarone"],
+      "reason": "Amiodarone inhibits CYP3A4, raising simvastatin levels and myopathy risk."
+    },
+    {
+      "drugs": ["furosemide", "gentamicin"],
+      "reason": "Loop diuretic + aminoglycoside combination increases ototoxicity and nephrotoxicity risk."
+    }
+  ],
+
+  "dose_tolerance_percent": 10
+}
