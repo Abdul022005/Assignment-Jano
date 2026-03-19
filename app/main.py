@@ -2,12 +2,14 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.db.client import connect, disconnect
+from app.db.client import connect, disconnect, get_db
+from app.db.indexes import ensure_indexes
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await connect()
+    await ensure_indexes(get_db())
     yield
     await disconnect()
 
