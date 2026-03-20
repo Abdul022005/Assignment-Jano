@@ -36,7 +36,7 @@ async def get_next_version(patient_id: str, source: MedicationSource) -> int:
     """
     collection = medication_snapshots()
     latest = await collection.find_one(
-        {"patient_id": patient_id, "source": source},
+        {"patient_id": patient_id, "source": source.value},
         sort=[("version", -1)],
         projection={"version": 1},
     )
@@ -80,7 +80,7 @@ async def ingest_medications(
     )
 
     # Persist — use model_dump with by_alias=True so "_id" is used, not "id"
-    doc = snapshot.model_dump(by_alias=True)
+    doc = snapshot.model_dump(by_alias=True, mode="json")
     await medication_snapshots().insert_one(doc)
 
     return snapshot

@@ -85,7 +85,7 @@ def detect_dose_mismatches(
     for source, snap in snapshots.items():
         snap_id = snap.get("_id", "")
         for med in snap.get("medications", []):
-            if med.get("status") == MedicationStatus.STOPPED:
+            if med.get("status") == MedicationStatus.STOPPED.value:
                 continue  # stopped drugs are handled by stopped_vs_active detector
             name = med.get("name_canonical", "")
             dose = med.get("dose")
@@ -140,11 +140,11 @@ def detect_stopped_vs_active(
         snap_id = snap.get("_id", "")
         for med in snap.get("medications", []):
             name = med.get("name_canonical", "")
-            status = med.get("status", MedicationStatus.ACTIVE)
+            status = med.get("status", MedicationStatus.ACTIVE.value)
             if not name:
                 continue
             entry = drug_status.setdefault(name, {"active": [], "stopped": []})
-            if status == MedicationStatus.STOPPED:
+            if status == MedicationStatus.STOPPED.value:
                 entry["stopped"].append((source, snap_id))
             else:
                 entry["active"].append((source, snap_id))
@@ -194,7 +194,7 @@ def detect_class_conflicts(
     for source, snap in snapshots.items():
         snap_id = snap.get("_id", "")
         for med in snap.get("medications", []):
-            if med.get("status") == MedicationStatus.STOPPED:
+            if med.get("status") == MedicationStatus.STOPPED.value:
                 continue
             name = med.get("name_canonical", "")
             if name:
@@ -252,7 +252,7 @@ async def _existing_open_conflict_key(patient_id: str) -> set[tuple]:
     """
     existing = set()
     cursor = conflicts().find(
-        {"patient_id": patient_id, "status": ConflictStatus.UNRESOLVED},
+        {"patient_id": patient_id, "status": ConflictStatus.UNRESOLVED.value},
         projection={"conflict_type": 1, "drug_names": 1},
     )
     async for doc in cursor:
@@ -295,7 +295,7 @@ async def save_conflicts(
             detail=item.detail,
             detected_at=datetime.now(timezone.utc),
         )
-        doc = conflict.model_dump(by_alias=True)
+        doc = conflict.model_dump(by_alias=True, mode="json")
         await conflicts().insert_one(doc)
         new_conflicts.append(conflict)
 
